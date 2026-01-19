@@ -6,12 +6,12 @@ from scipy.fft import fft, fftfreq
 class AudioAnalyzer:
     def __init__(self):
         self.files = {
-            "Песня": "samples/song.wav",
-            "Гитара": "samples/guitar.wav",
-            "Птицы": "samples/birds.wav"
+            "Песня": "backend/samples/song.wav",
+            "Гитара": "backend/samples/guitar.wav",
+            "Птицы": "backend/samples/birds.wav"
         }
 
-    def analyze_file(self, filename):  # filename = "Песня"
+    def analyze_file(self, filename):
         if filename not in self.files:
             raise ValueError(f"Нет аудио: {filename}")
         filepath = self.files[filename]

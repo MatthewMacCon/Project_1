@@ -21,4 +21,4 @@ class AudioAnalyzer:
         yf = fft(signal)
         freqs = fftfreq(N, 1 / sr)[:N // 2]
         amps = np.abs(yf[:N // 2])
-        return signal[:5000], freqs[:2500], amps[:2500], sr
+        return signal[:5000], freqs[:2500], amps[:2500], sr, filepath  # + filepath!

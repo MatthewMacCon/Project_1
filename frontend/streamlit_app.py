@@ -1,33 +1,32 @@
+import sys
+import os
+sys.path.append('/app/backend')
 
 import streamlit as st
 import numpy as np
-from scipy.fft import fft, fftfreq
 import plotly.graph_objects as go
-from backend.src.audio import AudioAnalyzer  # ← ТВОЙ МОДУЛЬ!
+from backend.src.audio import AudioAnalyzer  # только audio!
 
-st.set_page_config(page_title="Фурье Frontend")
-st.title("🎵 Анализатор Гармоник Аудио")
+st.set_page_config(page_title="Фурье Project_1", layout="wide")
 
+st.title("🎵 Фурье анализатор + Аудио")
+
+# Аудио
 analyzer = AudioAnalyzer()
+st.subheader("📁 Аудио файлы")
+for name, path in analyzer.files.items():
+    if st.button(name):
+        result = analyzer.analyze(path)
+        st.write(result)
 
-# Выбор файла
-selected_audio = st.selectbox(
-    "📁 Выберите аудио:",
-    ["Песня", "Гитара", "Птицы"]
-)
+# Фурье слайдер
+col1, col2 = st.columns(2)
+N = col1.slider("N", 8, 64, 32)
+k = col2.slider("k", 1, 10, 5)
 
-if st.button("🔍 Анализировать", type="primary"):
-    # Твой backend!
-    signal, freqs, amps, sr = analyzer.analyze_file(selected_audio)
+x = np.linspace(0, 2*np.pi, N)
+y = np.sin(2*np.pi*k*x/N)
 
-    col1, col2 = st.columns(2)
-
-    with col1:
-        fig1 = go.Figure(go.Scatter(x=np.arange(len(signal)) / sr, y=signal))
-        fig1.update_layout(title="Исходный сигнал")
-        st.plotly_chart(fig1, use_container_width=True)
-
-    with col2:
-        fig2 = go.Figure(go.Scatter(x=freqs, y=amps))
-        fig2.update_layout(title="Спектр Фурье")
-        st.plotly_chart(fig2, use_container_width=True)
+fig = go.Figure(data=go.Scatter(x=x, y=y, mode='lines'))
+fig.update_layout(title="Фурье гармоника")
+st.plotly_chart(fig, use_container_width=True)

@@ -1,0 +1,20 @@
+import numpy as np
+import librosa
+from scipy.fft import fft, fftfreq
+
+class AudioAnalyzer:
+    def __init__(self):
+        self.files = {
+            "Песня": "samples/song.wav",
+            "Гитара": "samples/guitar.wav", 
+            "Птицы": "samples/birds.wav"
+        }
+    
+    def analyze_file(self, filename):
+        filepath = self.files[filename]
+        signal, sr = librosa.load(filepath, sr=22050)
+        N = len(signal)
+        yf = fft(signal)
+        freqs = fftfreq(N, 1/sr)[:N//2]
+        amps = np.abs(yf[:N//2])
+        return signal[:5000], freqs[:2500], amps[:2500], sr

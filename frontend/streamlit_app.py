@@ -67,8 +67,6 @@ if uploaded_file is not None:
                 xaxis_title="Частота (Hz)",
                 yaxis_title="Амплитуда"
             )
-            fig_fft.add_vline(x=261.63, line_dash="dash", line_color="red",
-                              annotation_text="C4 (262 Hz)")
             st.plotly_chart(fig_fft, use_container_width=True)
 
         os.unlink(tmp_path)

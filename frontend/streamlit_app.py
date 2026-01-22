@@ -84,9 +84,9 @@ st.write(analyzer.files)
 
 # ОТЛАДКА 2
 signal_names = {
-    "sine_440.wav": "🌊 Синусоида (Sine)",
-    "saw_440.wav": "🔺 Пилообразный (Sawtooth)",
-    "square_440.wav": "⬜ Меандр (Square)"
+    "sine_440.wav": "Синусоида (Sine)",
+    "saw_440.wav": "Пилообразный (Sawtooth)",
+    "square_440.wav": "Меандр (Square)"
 }
 
 st.write("🔍 DEBUG: Ключи signal_names:")

@@ -18,7 +18,6 @@ analyzer = AudioAnalyzer()
 st.subheader("🎵 Загрузи свой файл:")
 uploaded_file = st.file_uploader("Выбери MP3 или WAV", type=['mp3', 'wav'])
 
-# ===== СЮДА ВСТАВЛЯЕМ НОВЫЙ КОД =====
 if uploaded_file is not None:
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as tmp_file:
@@ -76,22 +75,35 @@ if uploaded_file is not None:
 
 st.divider()
 
-# ===== ГОТОВЫЕ ФАЙЛЫ (СТАРЫЙ КОД ОСТАЕТСЯ) =====
+# ===== ГОТОВЫЕ ФАЙЛЫ (ОБНОВЛЕНО ПОД НОВЫЙ audio.py) =====
 st.subheader("📁 Или выбери готовое аудио:")
 for name in analyzer.files:
     if st.button(name, use_container_width=True):
         try:
-            signal, freqs, amps, sr, filepath = analyzer.analyze_file(name)
+            # Новые переменные из audio.py
+            x, freqs, mag_db, sr, filepath = analyzer.analyze_file(name)
 
             col1, col2 = st.columns(2)
             with col1:
                 st.audio(filepath)
-                fig_signal = go.Figure(data=go.Scatter(y=signal[:1000], mode='lines'))
-                fig_signal.update_layout(title="Изначальный сигнал", height=300)
+                fig_signal = go.Figure(data=go.Scatter(y=x[:1000], mode='lines'))
+                fig_signal.update_layout(
+                    title="Сигнал",
+                    height=300,
+                    xaxis_title="Отсчеты",
+                    yaxis_title="Амплитуда"
+                )
                 st.plotly_chart(fig_signal, use_container_width=True)
+
             with col2:
-                fig_fft = go.Figure(data=go.Scatter(x=freqs, y=amps, mode='lines'))
-                fig_fft.update_layout(title="Спектр Фурье", height=300)
+                fig_fft = go.Figure(data=go.Scatter(x=freqs, y=mag_db, mode='lines'))
+                fig_fft.update_layout(
+                    title="Спектр Фурье",
+                    height=300,
+                    xaxis_title="Частота (Hz)",
+                    yaxis_title="Амплитуда (dB)"
+                )
                 st.plotly_chart(fig_fft, use_container_width=True)
+
         except Exception as e:
             st.error(f"Ошибка: {e}")

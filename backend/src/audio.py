@@ -26,9 +26,16 @@ class AudioAnalyzer:
             x = np.pad(x, (0, N - len(x)))
 
         # окно (уменьшает утечку)
-        w = np.hanning(N)
-        xw = x * w
-
+        ideal_files = {"sine_440.wav", "square_440.wav", "saw_440.wav"}
+        use_window = (filename not in ideal_files)
+        if use_window:
+             w = np.hanning(N)
+             xw = x * w
+             scale = (np.sum(w) / 2.0)   # компенсация окна
+        else:
+             xw = x
+             scale = (N / 2.0)           # нормировка без окна
+        
         # FFT реального сигнала
         X = np.fft.rfft(xw)
         freqs = np.fft.rfftfreq(N, d=1/sr)

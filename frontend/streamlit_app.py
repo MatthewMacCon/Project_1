@@ -75,34 +75,19 @@ if uploaded_file is not None:
 
 st.divider()
 
-# ===== ГОТОВЫЕ СИГНАЛЫ (С ОТЛАДКОЙ) =====
-st.subheader("📊 Или выбери базовые сигналы 440 Гц:")
+# ===== ГОТОВЫЕ СИГНАЛЫ =====
+st.subheader("📊 Базовые сигналы 440 Гц:")
 
-# ОТЛАДКА 1
-st.write("🔍 DEBUG: Доступные файлы в analyzer.files:")
-st.write(analyzer.files)
-
-# ОТЛАДКА 2
 signal_names = {
-    "sine_440.wav": "Синусоида (Sine)",
-    "saw_440.wav": "Пилообразный (Sawtooth)",
-    "square_440.wav": "Меандр (Square)"
+    "sine_440.wav": "🌊 Синусоида",
+    "saw_440.wav": "🔺 Пилообразный",
+    "square_440.wav": "⬜ Меандр"
 }
-
-st.write("🔍 DEBUG: Ключи signal_names:")
-st.write(list(signal_names.keys()))
 
 for filename, display_name in signal_names.items():
     if st.button(display_name, use_container_width=True, key=filename):
         try:
-            # ОТЛАДКА 3
-            st.write(f"🔍 DEBUG: Пытаюсь загрузить файл: '{filename}'")
-            st.write(f"🔍 DEBUG: Этот ключ есть в analyzer.files? {filename in analyzer.files}")
-
             x, freqs, mag_db, sr, filepath = analyzer.analyze_file(filename)
-
-            # ОТЛАДКА 4
-            st.success(f"✅ Успех! Загружен файл: {filepath}")
 
             col1, col2 = st.columns(2)
             with col1:
@@ -128,6 +113,3 @@ for filename, display_name in signal_names.items():
 
         except Exception as e:
             st.error(f"❌ Ошибка: {e}")
-            import traceback
-
-            st.code(traceback.format_exc())

@@ -9,7 +9,7 @@ class AudioAnalyzer:
             "square_440.wav": "backend/samples/square_440.wav"
         }
 
-    def analyze_file(self, filename, sr=22050, duration=1.0, start=0.0, fmax=5000):
+    def analyze_file(self, filename, sr=44100, duration=2.0, start=0.0, fmax=1500):
         if filename not in self.files:
             raise ValueError(f"Нет аудио: {filename}")
         filepath = self.files[filename]
@@ -28,7 +28,7 @@ class AudioAnalyzer:
         # окно (уменьшает утечку)
         ideal_files = {"sine_440.wav", "square_440.wav", "saw_440.wav"}
         use_window = (filename not in ideal_files)
-        
+
         if not use_window:
             N = (N // 440) * 440
             x = x[:N]

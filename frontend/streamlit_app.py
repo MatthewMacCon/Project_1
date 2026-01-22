@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 from backend.src.audio import AudioAnalyzer
 
 st.set_page_config(page_title="Фурье Project_1", layout="wide")
-st.title("🎵 Фурье анализатор + Аудио")
+st.title("🎵 Фурье анализатор")
 
 analyzer = AudioAnalyzer()
 st.subheader("📁 Выбери аудио:")
@@ -22,7 +22,7 @@ for name in analyzer.files:
             with col1:
                 st.audio(filepath)  # Полный файл!
                 fig_signal = go.Figure(data=go.Scatter(y=signal[:1000], mode='lines'))
-                fig_signal.update_layout(title="Сигнал (первые 1000 точек)", height=300)
+                fig_signal.update_layout(title="Изначальный сигнал", height=300)
                 st.plotly_chart(fig_signal, use_container_width=True)
             with col2:
                 fig_fft = go.Figure(data=go.Scatter(x=freqs, y=amps, mode='lines'))

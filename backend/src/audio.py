@@ -4,9 +4,9 @@ import librosa
 class AudioAnalyzer:
     def __init__(self):
         self.files = {
-            "Песня": "backend/samples/song.wav",
-            "Гитара": "backend/samples/guitar.wav",
-            "Птицы": "backend/samples/birds.wav"
+            "Синус 440 Гц": "backend/samples/sine_440.wav",
+            "Меандр 440 Гц": "backend/samples/square_440.wav",
+            "Пила 440 Гц": "backend/samples/saw_440.wav"
         }
 
     def analyze_file(self, filename, sr=22050, duration=1.0, start=0.0, fmax=5000):

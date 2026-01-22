@@ -102,14 +102,22 @@ for filename, display_name in signal_names.items():
                 st.plotly_chart(fig_signal, use_container_width=True)
 
             with col2:
-                fig_fft = go.Figure(data=go.Scatter(x=freqs, y=mag_db, mode='lines', line=dict(color='#ff7f0e')))
+                fig_fft = go.Figure(data=go.Scatter(
+                    x=freqs,
+                    y=mag_db,
+                    mode='lines+markers',  # ✅ Добавили маркеры
+                    line=dict(color='#ff7f0e', width=2),
+                    marker=dict(size=4)
+                ))
                 fig_fft.update_layout(
                     title="Спектр Фурье",
                     height=300,
                     xaxis_title="Частота (Hz)",
-                    yaxis_title="Амплитуда (dB)"
+                    yaxis_title="Амплитуда (dB)",
+                    yaxis=dict(range=[-60, 10])  # ✅ Ограничили Y от -60 до +10 dB
                 )
                 st.plotly_chart(fig_fft, use_container_width=True)
+
 
         except Exception as e:
             st.error(f"❌ Ошибка: {e}")

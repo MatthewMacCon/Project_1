@@ -28,6 +28,11 @@ class AudioAnalyzer:
         # окно (уменьшает утечку)
         ideal_files = {"sine_440.wav", "square_440.wav", "saw_440.wav"}
         use_window = (filename not in ideal_files)
+        
+        if not use_window:
+            N = (N // 440) * 440
+            x = x[:N]
+
         if use_window:
              w = np.hanning(N)
              xw = x * w

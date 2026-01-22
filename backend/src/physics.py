@@ -1,47 +1,35 @@
 import numpy as np
-import librosa
+import soundfile as sf
+import os
 
-class AudioAnalyzer:
-    def __init__(self):
-        self.files = {
-            "Песня": "backend/samples/song.wav",
-            "Гитара": "backend/samples/guitar.wav",
-            "Птицы": "backend/samples/birds.wav"
-        }
+# ===== НАСТРОЙКИ =====
+SR = 22050          # частота дискретизации
+DURATION = 2.0      # длительность в секундах
+FREQ = 440          # частота сигнала (Гц)
 
-    def analyze_file(self, filename, sr=22050, duration=1.0, start=0.0, fmax=5000):
-        if filename not in self.files:
-            raise ValueError(f"Нет аудио: {filename}")
-        filepath = self.files[filename]
+# папка, куда сохраняем файлы
+OUTPUT_DIR = "backend/samples"
 
-        # грузим моно
-        signal, sr = librosa.load(filepath, sr=sr, mono=True)
+# ===== СОЗДАНИЕ ПАПКИ, ЕСЛИ ЕЁ НЕТ =====
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-        # выбираем фрагмент (чтобы слева и справа было одно и то же)
-        i0 = int(start * sr)
-        N = int(duration * sr)
-        x = signal[i0:i0 + N]
-        if len(x) < N:
-            # если файл короче — дополним нулями
-            x = np.pad(x, (0, N - len(x)))
+# ===== ВРЕМЕННАЯ ОСЬ =====
+t = np.linspace(0, DURATION, int(SR * DURATION), endpoint=False)
 
-        # окно (уменьшает утечку)
-        w = np.hanning(N)
-        xw = x * w
+# ===== СИГНАЛЫ =====
 
-        # FFT реального сигнала
-        X = np.fft.rfft(xw)
-        freqs = np.fft.rfftfreq(N, d=1/sr)
+# 1️⃣ Чистый синус
+sine = np.sin(2 * np.pi * FREQ * t)
 
-        # амплитудная нормировка: компенсируем окно
-        mag = np.abs(X) / (np.sum(w) / 2.0)
+# 2️⃣ Меандр (square wave)
+square = np.sign(np.sin(2 * np.pi * FREQ * t))
 
-        # dB для нормального вида (относительно 1.0)
-        mag_db = 20 * np.log10(mag + 1e-12)
+# 3️⃣ Пилообразная волна (sawtooth)
+saw = 2 * (FREQ * t - np.floor(0.5 + FREQ * t))
 
-        # режем до fmax
-        mask = freqs <= fmax
-        freqs = freqs[mask]
-        mag_db = mag_db[mask]
+# ===== СОХРАНЕНИЕ =====
+sf.write(os.path.join(OUTPUT_DIR, "sine_440.wav"), sine, SR)
+sf.write(os.path.join(OUTPUT_DIR, "square_440.wav"), square, SR)
+sf.write(os.path.join(OUTPUT_DIR, "saw_440.wav"), saw, SR)
 
-        return x, freqs, mag_db, sr, filepath
+print("✅ Тестовые сигналы успешно созданы в backend/samples")

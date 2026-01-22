@@ -24,6 +24,7 @@ class AudioAnalyzer:
         if len(x) < N:
             # если файл короче — дополним нулями
             x = np.pad(x, (0, N - len(x)))
+        x = x - np.mean(x)
 
         # окно (уменьшает утечку)
         ideal_files = {"sine_440.wav", "square_440.wav", "saw_440.wav"}

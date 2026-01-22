@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 from backend.src.audio import AudioAnalyzer
 
 st.set_page_config(page_title="Фурье Project_1", layout="wide")
-st.title("🎵 Фурье анализатор")
+st.title("Фурье анализатор")
 
 analyzer = AudioAnalyzer()
 st.subheader("📁 Выбери аудио:")

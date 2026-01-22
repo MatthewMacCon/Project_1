@@ -41,7 +41,7 @@ class AudioAnalyzer:
         freqs = np.fft.rfftfreq(N, d=1/sr)
 
         # амплитудная нормировка: компенсируем окно
-        mag = np.abs(X) / (np.sum(w) / 2.0)
+        mag = np.abs(X) / scale  # ✅ ПРАВИЛЬНО
 
         # dB для нормального вида (относительно 1.0)
         mag_db = 20 * np.log10(mag + 1e-12)
